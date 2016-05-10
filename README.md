@@ -1,5 +1,5 @@
 # Brute
-> MultiProccessing Instagram Account password bruteforcer
+> MultiProccessing password bruteforcer
 
 ***
 **[Warning] I take no responsibility for the use of this script [Warning]**
