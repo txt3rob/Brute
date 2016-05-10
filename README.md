@@ -8,9 +8,9 @@
 
 ###Usage
 
-```./brute.py <username> <wordlist> <proxylist> <thread>```
+```./brute.py <url> <wordlist> <proxylist> <thread>```
 
-``` ./brute.py netcat words.txt proxy.txt 4```
+``` ./brute.py http://someiptv.com:8080 words.txt proxy.txt 4```
 
 ###Requirements
 
