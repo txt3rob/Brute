@@ -116,7 +116,7 @@ def brute(word,event):
     if (r.status_code != 200 ):
       print "Error" , r.status_code
       #sys.exit(1)
-    if (r.text.find('{"status":"ok","authenticated":true}') != -1 ):
+    if (r.text.find('#EXTM3U') != -1 ):
       print "\n[*]Successful Login:"
       print "---------------------------------------------------"
       print "[!]Username: " , USER
